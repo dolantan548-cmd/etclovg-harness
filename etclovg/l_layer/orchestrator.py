@@ -222,16 +222,6 @@ class Orchestrator:
         start_time = time.time()
 
         # Phase 1: Plan — inject task into context
-        self.context.add_message(
-            dataclasses.replace(
-                type("Message", (), {})(role="user", content=task),
-                role="user",
-            )
-            if hasattr(self.context.add_message, "__wrapped__") else
-            type("Message", (), {"role": "user", "content": task, "tool_calls": None, "tool_call_id": None, "name": None, "timestamp": time.time(), "metadata": {}})()
-        )
-
-        # Let me fix this - just use a dict for messages
         from etclovg.c_layer.memory import Message as Msg
         self.context.add_message(Msg(role="user", content=task))
 

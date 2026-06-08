@@ -347,16 +347,7 @@ class ETCLOVGHarness:
         self.context_manager.set_system_prompt(full_system)
 
         # Step 3-4: C + L — execute
-        trace_span = self.telemetry.tracer.start_span(
-            name="harness_run",
-            kind=type("SpanKind", (), {"CUSTOM": "custom"})().CUSTOM,  # hack
-            task=task,
-        )
-        # Fix: use correct SpanKind
-        trace_span = self.telemetry.tracer.start_span(
-            name=f"harness_run:{task[:50]}",
-            kind=self.telemetry.tracer.start_span.__kwdefaults__.get("kind") or type("SpanKind", (), {"ORCHESTRATOR": "orchestrator"})().ORCHESTRATOR,
-        )
+        trace_span = self.telemetry.tracer.start_span(name=f"harness:{task[:40]}")
 
         self.telemetry.heartbeat.heartbeat()
         result = self.orchestrator.run(task, max_iterations=max_iterations)
